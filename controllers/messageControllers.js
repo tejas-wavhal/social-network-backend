@@ -26,6 +26,8 @@ export const getAllMessages = catchAsyncError(async (req, res, next) => {
 
   const { recieverId } = req.body
 
+  if (!recieverId) return next(new ErrorHandler("recieverId ID Missing", 400))
+
   const messages = await Message.find({ $or: [{ sender: req.user._id, reciever: recieverId }, { sender: recieverId, reciever: req.user._id }] }).populate("sender").populate("reciever")
 
   // const formatedMessages = messages.map((msg) => (
