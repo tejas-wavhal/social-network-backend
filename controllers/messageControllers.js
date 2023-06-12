@@ -30,13 +30,6 @@ export const getAllMessages = catchAsyncError(async (req, res, next) => {
 
   const messages = await Message.find({ $or: [{ sender: req.user._id, reciever: recieverId }, { sender: recieverId, reciever: req.user._id }] }).populate("sender").populate("reciever")
 
-  // const formatedMessages = messages.map((msg) => (
-  //   {
-  //     fromSelf: msg.sender.toString() === from,
-  //     message: msg.message.text
-  //   }
-  // ))
-
   if (!messages) return next(new ErrorHandler("Cannot get Messages", 404))
 
   res.status(200).json({
